@@ -1,0 +1,49 @@
+
+
+    <div class="main_body" id="main_body">
+        <div class="breadcrub">
+            当前位置：文章管理>文章列表
+        </div>
+        <div class="pannel">
+            <span class="sel_label">请选择文章分类：</span>
+            <form id="form" method="post" action="/article/index">
+            <select name="select" id="select" class="sel_opt">
+            {{range .articletypes}}
+                <option {{if compare .TypeName $.typename}}selected="true"{{end}}>{{.TypeName}}</option>
+            {{end}}
+            </select>
+            </form>
+            <table class="common_table">
+                <tr>
+                    <th width="43%">文章标题</th>
+                    <th width="10%">文章内容</th>
+                    <th width="16%">添加时间</th>
+                    <th width="7%">阅读量</th>
+                    <th width="7%">删除</th>
+                    <th width="7%">编辑</th>
+                    <th width="10%">文章类型</th>
+                </tr>
+
+
+            {{range $key,$value := .articles}}
+                <tr>
+                    <td>{{$value.Title}}</td>
+                    <td><a href="/article/showarticledetail?id={{$value.Id}}">查看详情</a></td>
+                    <td>{{$value.Time.Format "2006-01-02 15:04:05"}}</td>
+                    <td>{{$value.Readcount}}</td>
+                    <td><a href="/article/deletearticle?id={{$value.Id}}" class="dels">删除</a></td>
+                    <td><a href="/article/updatearticle?id={{$value.Id}}">编辑</a></td>
+                    <td>{{$value.ArticleType.TypeName}}</td>
+                </tr>
+            {{end}}
+            </table>
+
+            <ul class="pagenation">
+                <li><a href="/article/index?pagenum=1&select={{.typename}}">首页</a></li>
+                <li><a href="/article/index?pagenum={{prepage .currentPageNum}}&select={{.typename}}">上一页 </a> </li>
+                <li><a href="/article/index?pagenum={{nextpage .currentPageNum .pagecount}}&select={{.typename}}">下一页</a></li>
+                <li><a href="/article/index?pagenum={{.pagecount}}&select={{.typename}}">末页</a></li>
+                <li>共{{.amountnum}}条记录/共{{.pagecount}}页/当前{{.currentPageNum}}页</li>
+            </ul>
+        </div>
+    </div>
